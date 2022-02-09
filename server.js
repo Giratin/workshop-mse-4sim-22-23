@@ -1,53 +1,68 @@
-import express from 'express'; // Importer express
+import express from 'express';
+import { readFile } from 'fs';
+import { join, dirname } from 'path';
+import {fileURLToPath} from 'url';
 
-const app = express(); // Créer l'instance de express à utiliser
+const app = express();
 
-const hostname = '127.0.0.1'; // L'@ du serveur
-const port = process.env.PORT || 9090; // Le port du serveur
+const port = process.env.PORT || 9090;
 
 class Game {
-  constructor(name, year) {
+  constructor(name, year, url) {
     this.name = name;
     this.year = year;
+    this.url = url;
   }
 }
 
-/**
- * lorsqu'une demande arrive à 'entity'
- * à l'aide de la méthode GET de HTTP
- */
-app.get('/entity', (req, res) => {
-  const game = new Game("dmc5", 2019);
-  res.status(200).json(game);
-})
-
-/**
- * Demander l'adresse (URL) de base '/'
- * à l'aide de la méthode GET de HTTP
- */
-app.get('/', (req, res) => {
-  res.status(200).json({ message : 'Hello World!' }); // envoyer la réponse au requérant
-})
-
-/**
- * lorsqu'une demande arrive à '/game/n_importe_quoi'
- * à l'aide de la méthode GET de HTTP
- */
-app.get('/game/:name', (req, res) => {
-  res.status(200).json({ message : `The name of this game is ${req.params.name}` });
-})
-
-/**
- * lorsqu'une demande arrive à '/secret'
- * à l'aide de la méthode GET de HTTP
- */
-app.get("/secret", (req, res) => {
-  res.status(401).json({ message: "Unauthorized" });
+app.get('/game', (req, res) => {
+  const __dirname = dirname(fileURLToPath(import.meta.url));
+  readFile(join(__dirname, 'SteamGames.json'), function(err, data) {
+    if(!err) {
+      const list = JSON.parse(data);
+      let games = [];
+      for(let i = 0; i < list.length; i++) {
+        games.push(new Game(list[i].Game, list[i].Year, list[i].GameLink));
+      }
+      res.status(200).json(games);
+    }else {
+      res.status(404).json({ error : err });
+    }
+  });
 });
 
-/**
- * Démarrer le serveur à l'écoute des connexions
- */
-app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+app.get('/game/select/:year', (req, res) => {
+  const __dirname = dirname(fileURLToPath(import.meta.url));
+  readFile(join(__dirname, 'SteamGames.json'), function(err, data) {
+    if(!err) {
+      const list = JSON.parse(data);
+      let games = [];
+      for(let i = 0; i < list.length; i++) {
+        games.push(new Game(list[i].Game, list[i].Year, list[i].GameLink));
+      }
+      res.status(200).json(games.filter(val => val.year > req.params.year));
+    }else {
+      res.status(404).json({ error : err });
+    }
+  });
+});
+
+app.get('/game/:name', (req, res) => {
+  const __dirname = dirname(fileURLToPath(import.meta.url));
+  readFile(join(__dirname, 'SteamGames.json'), function(err, data) {
+    if(!err) {
+      const list = JSON.parse(data);
+      let games = [];
+      for(let i = 0; i < list.length; i++) {
+        games.push(new Game(list[i].Game, list[i].Year, list[i].GameLink));
+      }
+      res.status(200).json({ url : games.find(val => val.name == req.params.name).url });
+    }else {
+      res.status(404).json({ error : err });
+    }
+  });
+});
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}/`);
 });
