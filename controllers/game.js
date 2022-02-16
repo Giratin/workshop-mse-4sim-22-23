@@ -1,29 +1,42 @@
 import Game from '../models/game.js';
 
-const games = [new Game("dmc5", 2019), new Game("re8", 2021), new Game("nfs", 2019)];
+export const games = [];
+var id = 1;
 
 export function getAll(req, res) {
-    res.status(200).json(games);
+    let list = [];
+    for(let i = 0; i < games.length; i++) {
+        list.push({
+            id: games[i].id,
+            title: games[i].title,
+            price: games[i].price,
+        });
+    }
+    res.status(200).json(list);
 }
 
 export function addOnce(req, res) {
-    const game = new Game(req.body.name, req.body.year);
+    const game = new Game(id, req.body.title, req.body.description,
+        req.body.price, req.body.quantity);
     games.push(game);
-    res.status(201).json({ message: "Created !", entity: game});
+    id++;
+    res.status(201).json({
+        title: game.title,
+        description: game.description,
+        price: game.price,
+        quantity: game.quantity
+    });
 }
 
 export function getOnce(req, res) {
-    res.status(200).json(games.find(val => val.name === req.params.name));
+    res.status(200).json(games.find(val => val.id == req.params.id));
 }
 
 export function putOnce(req, res) {
-    res.status(200).json({ message: "Updated !", name: req.params.name});
-}
-
-export function patchOnce(req, res) {
-    res.status(200).json({ message: "Updated !", name: req.params.name});
-}
-
-export function deleteOnce(req, res) {
-    res.status(200).json({ message: "Deleted !", name: req.params.name});
+    const game = games.find(val => val.id == req.params.id);
+    game.title = req.body.title;
+    game.description = req.body.description;
+    game.price = req.body.price;
+    game.quantity = req.body.quantity;
+    res.status(200).json(game);
 }

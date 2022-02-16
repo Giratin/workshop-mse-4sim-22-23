@@ -1,15 +1,17 @@
 import express from 'express';
 
 const app = express();
-
 const port = process.env.PORT || 9090;
 
-import gameRoutes from './routes/game.js'; // importer le router du fichier routes/game.js
+import gameRoutes from './routes/game.js';
+import userRoutes from './routes/user.js';
+import achatRoutes from './routes/achat.js';
 
-app.use(express.json()); // Pour analyser (parsing) les requetes application/json
+app.use(express.json());
 
-// préfixe chaque route ici avec /game
-app.use('/game', gameRoutes); // Utiliser les routes créés
+app.use('/game', gameRoutes);
+app.use('/user', userRoutes);
+app.use('/buy', achatRoutes);
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);

@@ -1,6 +1,9 @@
 export default class Game {
-    constructor(name, year) {
-        this.name = name;
-        this.year = year;
+    constructor(id, title, description, price, quantity) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.price = price;
+        this.quantity = quantity;
     }
 }
