@@ -1,7 +1,8 @@
 import express from 'express';
 
-import { getAll, addOnce, getOnce, putOnce } from '../controllers/game.js';
-  
+import { getAll, addOnce, getOnce,
+  putAll, patchOnce, deleteOnce } from '../controllers/game.js';
+
 const router = express.Router();
 
 router
@@ -10,8 +11,10 @@ router
   .post(addOnce);
 
 router
-  .route('/:id')
+  .route('/:name')
   .get(getOnce)
-  .put(putOnce);
-  
+  .put(putAll)
+  .patch(patchOnce)
+  .delete(deleteOnce);
+
 export default router;
