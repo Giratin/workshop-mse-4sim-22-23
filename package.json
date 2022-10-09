@@ -1,7 +1,7 @@
 {
-  "name": "s2-gse-app",
+  "name": "s2-mse-app",
   "version": "1.0.0",
-  "description": "This is the 2nd APP workshop for the SGE module.",
+  "description": "This is the 2nd APP workshop for the MSE module.",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -10,10 +10,10 @@
   },
   "keywords": [
     "Node.js",
-    "SGE",
-    "GamiX"
+    "MSE",
+    "SIM"
   ],
-  "author": "Abdel Monem AISSA",
+  "author": "Giratin",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.2"
