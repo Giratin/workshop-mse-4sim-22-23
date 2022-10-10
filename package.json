@@ -1,5 +1,5 @@
 {
-  "name": "s2-gse-app",
+  "name": "s2-mse-app",
   "version": "1.0.0",
   "description": "This is the 2nd APP workshop for the MSE module.",
   "main": "server.js",
@@ -10,7 +10,7 @@
   },
   "keywords": [
     "Node.js",
-    "SGE",
+    "MSE",
     "SIM"
   ],
   "author": "Giratin",
